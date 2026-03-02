@@ -24,6 +24,7 @@ app.use('/api/itinerarios', require('./routes/itinerario.routes'))
 app.use('/api/guias', require('./routes/guia.routes')) 
 app.use('/api/cuidadores', require('./routes/cuidador.routes'))
 app.use('/api/guia-itinerarios', require('./routes/guiaItinerario.routes')) 
+app.use('/api/cuidador-especies', require('./routes/cuidadorEspecie.routes')) 
 
 
 module.exports = app; 
