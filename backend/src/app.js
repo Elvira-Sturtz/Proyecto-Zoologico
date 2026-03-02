@@ -18,7 +18,7 @@ app.get('/', (req, res)=>{
 
 // rutas zoo 
 app.use('/api/zonas', require('./routes/zona.routes')) 
-
-app.use('/api/habitats', require('./routes/habitat.routes'))
+app.use('/api/habitats', require('./routes/habitat.routes')) 
+app.use('/api/especies', require('./routes/especie.routes'))
 
 module.exports = app; 
