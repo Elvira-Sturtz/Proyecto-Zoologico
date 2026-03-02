@@ -6,9 +6,8 @@ const URI = process.env.MONGODB_URI
             : 'mongodb://localhost/dbtest'  
 
 mongoose.connect(URI)
+    .then(() => console.log('Base de datos conectada:', URI))
+    .catch(err => console.error('Error de conexión:', err));
 
-const connection = mongoose.connection; 
 
-connection.once('open', ()=>{
-    console.log('la base de datos ha sido conectada: ', URI); 
-})
+
