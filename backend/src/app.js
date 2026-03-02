@@ -16,7 +16,9 @@ app.get('/', (req, res)=>{
     res.send('Bienvenido a mi api rest full');
 }) 
 
-// ruta zonas 
-app.use('/api/zonas', require('./routes/zona.routes'))
+// rutas zoo 
+app.use('/api/zonas', require('./routes/zona.routes')) 
+
+app.use('/api/habitats', require('./routes/habitat.routes'))
 
 module.exports = app; 
