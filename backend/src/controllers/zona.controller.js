@@ -65,7 +65,7 @@ const zonaCtrl = {}  /*objeto vacío*/
  }
 
  // Actualizar zona 
- zonaCtrl.updateZona = async(req, res) =>{  //petición por put para actualizar 
+ zonaCtrl.updateZona = async(req, res) =>{   
     try {
         const { nombre, extension } = req.body;
 
