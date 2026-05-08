@@ -1,13 +1,13 @@
 const cuidadorEspecieCtrl = {};
 
-const CuidadorEspecie = require('../models/CuidadorEspecie');
+const CuidadorEspecie = require("../models/CuidadorEspecie");
 
 // Obtener todas las relaciones Cuidador-Especie
 cuidadorEspecieCtrl.getCuidadoresEspecies = async (req, res) => {
   try {
     const relaciones = await CuidadorEspecie.find()
-      .populate('cuidador')
-      .populate('especie');
+      .populate("cuidador")
+      .populate("especie");
 
     res.json(relaciones);
   } catch (error) {
@@ -23,7 +23,7 @@ cuidadorEspecieCtrl.createCuidadorEspecie = async (req, res) => {
     const nuevaRelacion = new CuidadorEspecie({
       cuidador,
       especie,
-      fechaAsignacion
+      fechaAsignacion,
     });
 
     await nuevaRelacion.save();
@@ -37,11 +37,11 @@ cuidadorEspecieCtrl.createCuidadorEspecie = async (req, res) => {
 cuidadorEspecieCtrl.getCuidadorEspecieById = async (req, res) => {
   try {
     const relacion = await CuidadorEspecie.findById(req.params.id)
-      .populate('cuidador')
-      .populate('especie');
+      .populate("cuidador")
+      .populate("especie");
 
     if (!relacion) {
-      return res.status(404).json({ message: 'Relación no encontrada' });
+      return res.status(404).json({ message: "Relación no encontrada" });
     }
 
     res.json(relacion);
@@ -56,10 +56,10 @@ cuidadorEspecieCtrl.deleteCuidadorEspecie = async (req, res) => {
     const deleted = await CuidadorEspecie.findByIdAndDelete(req.params.id);
 
     if (!deleted) {
-      return res.status(404).json({ message: 'Relación no encontrada' });
+      return res.status(404).json({ message: "Relación no encontrada" });
     }
 
-    res.json({ message: 'Relación eliminada correctamente' });
+    res.json({ message: "Relación eliminada correctamente" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -73,11 +73,11 @@ cuidadorEspecieCtrl.updateCuidadorEspecie = async (req, res) => {
     const updated = await CuidadorEspecie.findByIdAndUpdate(
       req.params.id,
       { cuidador, especie, fechaAsignacion },
-      { new: true }
+      { new: true },
     );
 
     if (!updated) {
-      return res.status(404).json({ message: 'Relación no encontrada' });
+      return res.status(404).json({ message: "Relación no encontrada" });
     }
 
     res.json(updated);
@@ -86,4 +86,21 @@ cuidadorEspecieCtrl.updateCuidadorEspecie = async (req, res) => {
   }
 };
 
-module.exports = cuidadorEspecieCtrl; 
+// Obtener especies de un cuidador específico
+cuidadorEspecieCtrl.getEspeciesByCuidador = async (req, res) => {
+  try {
+    const relaciones = await CuidadorEspecie.find({
+      cuidador: req.params.id,
+    })
+      .populate("cuidador")
+      .populate("especie");
+
+    res.json(relaciones);
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+module.exports = cuidadorEspecieCtrl;
