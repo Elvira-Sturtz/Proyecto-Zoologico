@@ -36,10 +36,42 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
   try {
-    res.send("login");
+    const { email, password } = req.body;
+
+    const userFound = await Usuario.findOne({ email });
+
+    if (!userFound)
+      return res.status(400).json({
+        message: "Usuario no encontrado",
+      });
+
+    // coincide la contraseña
+    const isMatch = await bcrypt.compare(password, userFound.password);
+    if (!isMatch) {
+      return res.status(400).json({
+        message: "Contraseña incorrecta",
+      });
+    }
+
+    const token = await createAccessToken({ id: userFound._id });
+
+    res.cookie("token", token);
+    res.status(201).json({
+      message: "Usuario creado correctamente",
+      id: userFound._id,
+      username: userFound.username,
+      email: userFound.email,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-module.exports = { register, login };
+const logout = async (req, res) => {
+  res.cookie("token", "", {
+    expires: new Date(0),
+  });
+  return res.sendStatus(200);
+};
+
+module.exports = { register, login, logout };
