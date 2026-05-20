@@ -7,7 +7,7 @@ const {
   profile,
 } = require("../controllers/auth.controller");
 
-const auth = require("../middlewares/validateToken");
+const auth = require("../middlewares/auth.middleware");
 
 const router = Router();
 

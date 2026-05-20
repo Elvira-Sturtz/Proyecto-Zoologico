@@ -7,20 +7,26 @@ const {
   getCuidadorEspecieById,
   deleteCuidadorEspecie,
   updateCuidadorEspecie,
-  getEspeciesByCuidador,
+  getMisEspecies,
 } = require("../controllers/cuidadorEspecie.controller");
 
-// Ruta base: /api/cuidador-especies
-router.route("/").get(getCuidadoresEspecies).post(createCuidadorEspecie);
+const auth = require("../middlewares/auth.middleware");
+const verificarRol = require("../middlewares/role.middleware");
 
-// Obtener especies de un cuidador
-router.get("/cuidador/:id", getEspeciesByCuidador);
+// Ruta base: /api/cuidador-especies  todas las relaciones
+router
+  .route("/")
+  .get(auth, verificarRol("admin"), getCuidadoresEspecies)
+  .post(auth, verificarRol("admin"), createCuidadorEspecie);
+
+// Obtener especies de un cuidador especifico - Mis especies
+router.get("/mis-especies", auth, verificarRol("cuidador"), getMisEspecies);
 
 // Rutas con ID: /api/cuidador-especies/:id
 router
   .route("/:id")
-  .get(getCuidadorEspecieById)
-  .delete(deleteCuidadorEspecie)
-  .put(updateCuidadorEspecie);
+  .get(auth, verificarRol("admin", "cuidador"), getCuidadorEspecieById)
+  .delete(auth, verificarRol("admin"), deleteCuidadorEspecie)
+  .put(auth, verificarRol("admin"), updateCuidadorEspecie);
 
 module.exports = router;

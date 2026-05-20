@@ -87,10 +87,10 @@ cuidadorEspecieCtrl.updateCuidadorEspecie = async (req, res) => {
 };
 
 // Obtener especies de un cuidador específico
-cuidadorEspecieCtrl.getEspeciesByCuidador = async (req, res) => {
+cuidadorEspecieCtrl.getMisEspecies = async (req, res) => {
   try {
     const relaciones = await CuidadorEspecie.find({
-      cuidador: req.params.id,
+      cuidador: req.user.cuidador,
     })
       .populate("cuidador")
       .populate("especie");

@@ -1,13 +1,13 @@
 const guiaItinerarioCtrl = {};
 
-const GuiaItinerario = require('../models/GuiaItinerario');
+const GuiaItinerario = require("../models/GuiaItinerario");
 
 // Obtener todas las relaciones Guia-Itinerario
 guiaItinerarioCtrl.getGuiasItinerarios = async (req, res) => {
   try {
     const relaciones = await GuiaItinerario.find()
-      .populate('guia')
-      .populate('itinerario');
+      .populate("guia")
+      .populate("itinerario");
 
     res.json(relaciones);
   } catch (error) {
@@ -23,7 +23,7 @@ guiaItinerarioCtrl.createGuiaItinerario = async (req, res) => {
     const nuevaRelacion = new GuiaItinerario({
       guia,
       itinerario,
-      hora
+      hora,
     });
 
     await nuevaRelacion.save();
@@ -37,11 +37,11 @@ guiaItinerarioCtrl.createGuiaItinerario = async (req, res) => {
 guiaItinerarioCtrl.getGuiaItinerarioById = async (req, res) => {
   try {
     const relacion = await GuiaItinerario.findById(req.params.id)
-      .populate('guia')
-      .populate('itinerario');
+      .populate("guia")
+      .populate("itinerario");
 
     if (!relacion) {
-      return res.status(404).json({ message: 'Relación no encontrada' });
+      return res.status(404).json({ message: "Relación no encontrada" });
     }
 
     res.json(relacion);
@@ -56,10 +56,10 @@ guiaItinerarioCtrl.deleteGuiaItinerario = async (req, res) => {
     const deleted = await GuiaItinerario.findByIdAndDelete(req.params.id);
 
     if (!deleted) {
-      return res.status(404).json({ message: 'Relación no encontrada' });
+      return res.status(404).json({ message: "Relación no encontrada" });
     }
 
-    res.json({ message: 'Relación eliminada correctamente' });
+    res.json({ message: "Relación eliminada correctamente" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -73,11 +73,11 @@ guiaItinerarioCtrl.updateGuiaItinerario = async (req, res) => {
     const updated = await GuiaItinerario.findByIdAndUpdate(
       req.params.id,
       { guia, itinerario, hora },
-      { new: true }
+      { new: true },
     );
 
     if (!updated) {
-      return res.status(404).json({ message: 'Relación no encontrada' });
+      return res.status(404).json({ message: "Relación no encontrada" });
     }
 
     res.json(updated);
@@ -86,4 +86,20 @@ guiaItinerarioCtrl.updateGuiaItinerario = async (req, res) => {
   }
 };
 
+// Obtener itinerarios de un guia autenticado
+guiaItinerarioCtrl.getMisItinerarios = async (req, res) => {
+  try {
+    const relaciones = await GuiaItinerario.find({
+      guia: req.user.guia,
+    })
+      .populate("guia")
+      .populate("itinerario");
+
+    res.json(relaciones);
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
 module.exports = guiaItinerarioCtrl;

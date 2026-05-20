@@ -1,22 +1,29 @@
-const {Router} = require('express') 
+const { Router } = require("express");
 
- const router = Router() 
+const router = Router();
 
-const { createHabitat, getHabitats, getHabitatById, deleteHabitat, updateHabitat } = require('../controllers/habitat.controller')
+const {
+  createHabitat,
+  getHabitats,
+  getHabitatById,
+  deleteHabitat,
+  updateHabitat,
+} = require("../controllers/habitat.controller");
 
+const auth = require("../middlewares/auth.middleware");
+const verificarRol = require("../middlewares/role.middleware");
 
-  
+router
+  .route("/") //ruta base: /api/habitats
 
- router.route('/')  //ruta base: /api/habitats
+  .get(auth, verificarRol("admin"), getHabitats)
+  .post(auth, verificarRol("admin"), createHabitat);
 
-    .get(getHabitats)
-    .post(createHabitat) 
+// Rutas con ID: /api/habitats/:id
+router
+  .route("/:id")
+  .get(auth, verificarRol("admin"), getHabitatById)
+  .delete(auth, verificarRol("admin"), deleteHabitat)
+  .put(auth, verificarRol("admin"), updateHabitat);
 
-    // Rutas con ID: /api/habitats/:id
-router.route('/:id') 
-    .get(getHabitatById) 
-    .delete(deleteHabitat) 
-    .put(updateHabitat) 
-
-
-module.exports = router; 
+module.exports = router;
