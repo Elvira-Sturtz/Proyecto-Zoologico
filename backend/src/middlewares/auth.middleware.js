@@ -7,11 +7,11 @@ const auth = (req, res, next) => {
     if (!token)
       return res
         .status(401)
-        .json({ message: "No hay token, authorization denegada" });
+        .json({ message: "No hay token, autorizacion denegada" }); //No autorizado
 
     jwt.verify(token, process.env.TOKEN_SECRET, (error, user) => {
       if (error) {
-        return res.status(401).json({ message: "Token no valido" });
+        return res.status(401).json({ message: "Token invalido" });
       }
       req.user = user;
       next();
