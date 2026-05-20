@@ -1,10 +1,19 @@
+// generando token
+
 const jwt = require("jsonwebtoken");
 
-export async function createAccessToken(payload) {
+const createAccessToken = (payload) => {
   return new Promise((resolve, reject) => {
-    jwt.sign(payload, TOKEN_SECRET, { expiresIn: "1d" }, (err, token) => {
-      if (err) reject(err);
-      resolve(token);
-    });
+    jwt.sign(
+      payload,
+      process.env.TOKEN_SECRET,
+      { expiresIn: "1d" },
+      (err, token) => {
+        if (err) reject(err);
+        resolve(token);
+      },
+    );
   });
-}
+};
+
+module.exports = { createAccessToken };
