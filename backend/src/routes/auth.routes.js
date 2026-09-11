@@ -1,11 +1,11 @@
 const { Router } = require("express");
 
-const {
-  register,
-  login,
-  logout,
-  profile,
-} = require("../controllers/auth.controller");
+
+const register = require("../controllers/auth/register.controller");
+const login = require("../controllers/auth/login.controller");
+const logout = require("../controllers/auth/logout.controller");
+const profile = require("../controllers/auth/profile.controller");
+
 
 const auth = require("../middlewares/auth.middleware");
 
