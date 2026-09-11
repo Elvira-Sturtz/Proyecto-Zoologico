@@ -20,7 +20,12 @@ const cuidadorSchema = new Schema(
     fechaIngreso: {
       type: Date,
       required: true
-    }
+    },
+    usuario: {
+      type: Schema.Types.ObjectId,
+      ref: "Usuario",
+      required: true,
+    },
   },
   {
     timestamps: true

@@ -1,4 +1,5 @@
 const { Schema, model } = require("mongoose");
+const ROLES = require('../enums/rol.enum'); 
 
 const usuarioSchema = new Schema(
   {
@@ -19,17 +20,11 @@ const usuarioSchema = new Schema(
     },
     rol: {
       type: String,
-      enum: ["admin", "guia", "cuidador"],
+      enum: Object.values(ROLES),
+        default: ROLES.CUIDADOR,
       required: true,
     },
-    guia: {
-      type: Schema.Types.ObjectId,
-      ref: "Guia",
-    },
-    cuidador: {
-      type: Schema.Types.ObjectId,
-      ref: "Cuidador",
-    },
+    
   },
   {
     timestamps: true,

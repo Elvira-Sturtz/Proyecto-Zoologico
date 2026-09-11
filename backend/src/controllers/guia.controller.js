@@ -16,13 +16,14 @@ const guiaCtrl = {}
  //Crear Guia
  guiaCtrl.createGuia = async(req, res) =>{   
     try {
-        const { nombre, direccion, telefono, fechaIngreso } = req.body;
+        const { nombre, direccion, telefono, fechaIngreso, usuario } = req.body;
 
         const newGuia = new Guia({
             nombre,
             direccion, 
             telefono, 
-            fechaIngreso 
+            fechaIngreso,
+            usuario 
         });
 
         await newGuia.save();
@@ -69,11 +70,11 @@ const guiaCtrl = {}
  // Actualizar Guia 
  guiaCtrl.updateGuia = async(req, res) =>{  
     try {
-        const { nombre, direccion, telefono, fechaIngreso  } = req.body;
+        const { nombre, direccion, telefono, fechaIngreso, usuario  } = req.body;
 
         const updatedGuia = await Guia.findByIdAndUpdate(
             req.params.id,
-            { nombre, direccion, telefono, fechaIngreso  },
+            { nombre, direccion, telefono, fechaIngreso, usuario  },
             { new: true }
         );
 

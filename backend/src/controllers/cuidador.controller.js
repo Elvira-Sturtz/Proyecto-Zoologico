@@ -5,9 +5,7 @@ const Cuidador = require("../models/Cuidador");
 // Obtener todos los Cuidadores
 cuidadorCtrl.getCuidadores = async (req, res) => {
   try {
-    const cuidadores = await Cuidador.find({
-      user: req.user.id,
-    });
+    const cuidadores = await Cuidador.find();
     res.json(cuidadores);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -17,13 +15,14 @@ cuidadorCtrl.getCuidadores = async (req, res) => {
 //Crear Cuidador
 cuidadorCtrl.createCuidador = async (req, res) => {
   try {
-    const { nombre, direccion, telefono, fechaIngreso } = req.body;
+    const { nombre, direccion, telefono, fechaIngreso, usuario } = req.body;
 
     const newCuidador = new Cuidador({
       nombre,
       direccion,
       telefono,
       fechaIngreso,
+      usuario,
     });
 
     await newCuidador.save();
@@ -66,11 +65,11 @@ cuidadorCtrl.deleteCuidador = async (req, res) => {
 // Actualizar Cuidador
 cuidadorCtrl.updateCuidador = async (req, res) => {
   try {
-    const { nombre, direccion, telefono, fechaIngreso } = req.body;
+    const { nombre, direccion, telefono, fechaIngreso, usuario } = req.body;
 
     const updatedCuidador = await Cuidador.findByIdAndUpdate(
       req.params.id,
-      { nombre, direccion, telefono, fechaIngreso },
+      { nombre, direccion, telefono, fechaIngreso, usuario },
       { new: true },
     );
 

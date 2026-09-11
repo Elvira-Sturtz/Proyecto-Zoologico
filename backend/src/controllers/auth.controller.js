@@ -7,7 +7,7 @@ const bcrypt = require("bcryptjs");
 // REGISTER
 const register = async (req, res) => {
   try {
-    const { email, password, username, rol, guia, cuidador } = req.body;
+    const { email, password, username, rol } = req.body;
 
     // Verificar si ya existe email
     const userFound = await Usuario.findOne({ email });
@@ -18,7 +18,7 @@ const register = async (req, res) => {
       });
     }
 
-    // hashing the password
+    // Encriptar contraseña 
     const passwordHash = await bcrypt.hash(password, 10);
 
     // Crear usuario
@@ -27,19 +27,16 @@ const register = async (req, res) => {
       email,
       password: passwordHash,
       rol,
-      guia,
-      cuidador,
     });
 
-    // saving the user in the database
+    // Guardar usuario
     const userSaved = await newUsuario.save();
 
-    // Craer token
+    // Crear token
     const token = await createAccessToken({
       id: userSaved._id,
       rol: userSaved.rol,
-      guia: userSaved.guia,
-      cuidador: userSaved.cuidador,
+      
     });
 
     res.cookie("token", token);
@@ -79,10 +76,9 @@ const login = async (req, res) => {
 
     // crear token
     const token = await createAccessToken({
-      id: userSaved._id,
-      rol: userSaved.rol,
-      guia: userSaved.guia,
-      cuidador: userSaved.cuidador,
+      id: userFound._id,
+      rol: userFound.rol,
+      
     });
 
     res.cookie("token", token);
