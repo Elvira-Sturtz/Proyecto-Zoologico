@@ -29,6 +29,11 @@ const login = async (req, res) => {
 
     res.cookie("token", token);
 
+    // res.cookie("token", token, {
+    //   httpOnly: true,
+    //   sameSite: "lax",
+    // });
+
     res.status(200).json({
       message: "Inicio de Sesión correcto",
       id: userFound._id,
