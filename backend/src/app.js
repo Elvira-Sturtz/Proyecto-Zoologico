@@ -15,7 +15,7 @@ app.use(logger("dev"));
 //app.use(cors());
 app.use(
   cors({
-    origin: "http://172.16.2.142:5173",
+    origin: "http://172.16.2.129:5173",
     credentials: true,
   }),
 );

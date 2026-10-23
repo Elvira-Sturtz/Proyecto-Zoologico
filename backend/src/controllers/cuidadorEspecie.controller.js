@@ -44,6 +44,12 @@ cuidadorEspecieCtrl.getCuidadorEspecieById = async (req, res) => {
       return res.status(404).json({ message: "Relación no encontrada" });
     }
 
+// 🔒 Validación de Privacidad:
+    // Si NO es admin, verificamos que la relación pertenezca al cuidador logueado
+    if (req.user.rol !== "admin" && relacion.cuidador._id.toString() !== req.user.cuidador.toString()) {
+      return res.status(403).json({ message: "No tienes permiso para acceder a este recurso ajeno" });
+    }
+
     res.json(relacion);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -89,8 +95,17 @@ cuidadorEspecieCtrl.updateCuidadorEspecie = async (req, res) => {
 // Obtener especies de un cuidador específico
 cuidadorEspecieCtrl.getMisEspecies = async (req, res) => {
   try {
+
+     // 1. Buscamos el ID del cuidador usando el ID del usuario autenticado
+    const perfilCuidador = await Cuidador.findOne({ usuario: req.user.id });
+    
+    if (!perfilCuidador) {
+      return res.status(404).json({ message: "No se encontró el perfil de cuidador para este usuario." });
+    }
+
+    // 2. Ahora sí usamos su ID real de la colección Cuidadores
     const relaciones = await CuidadorEspecie.find({
-      cuidador: req.user.cuidador,
+      cuidador: perfilCuidador._id ,
     })
       .populate("cuidador")
       .populate("especie");

@@ -33,7 +33,7 @@ guiaItinerarioCtrl.createGuiaItinerario = async (req, res) => {
   }
 };
 
-// Obtener relación por ID
+// Obtener relación por ID (Protegido para que los guías no vean itinerarios ajenos)
 guiaItinerarioCtrl.getGuiaItinerarioById = async (req, res) => {
   try {
     const relacion = await GuiaItinerario.findById(req.params.id)
@@ -44,6 +44,12 @@ guiaItinerarioCtrl.getGuiaItinerarioById = async (req, res) => {
       return res.status(404).json({ message: "Relación no encontrada" });
     }
 
+    // Validación de privacidad: Si no es admin, debe ser el dueño del itinerario
+    // (Asumiendo Opción A: req.user.guia contiene el ID del modelo Guia)
+    if (req.user.rol !== "admin" && relacion.guia._id.toString() !== req.user.guia.toString()) {
+      return res.status(403).json({ message: "No tienes permiso para acceder a este recurso" });
+    }
+    
     res.json(relacion);
   } catch (error) {
     res.status(500).json({ message: error.message });
